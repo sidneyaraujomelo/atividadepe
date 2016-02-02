@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1453922808 source:c:\users\laws-01\desktop\sidney\c\peatv1\main.cpp
+	<iostream>
+	<stdio.h>
+	<conio.h>
+	<stdlib.h>
+	<math.h>
+
