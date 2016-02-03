@@ -18,4 +18,6 @@ float ** metodoMatriz(float **, float **, int, int);
 
 float metodoChapman(float **, int, int, int, int);
 
+float probPrimeiraVisita(float **, int, int, int, int);
+
 #endif // MARKOVMAT_H_INCLUDED

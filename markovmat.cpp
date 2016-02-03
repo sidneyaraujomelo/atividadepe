@@ -99,3 +99,21 @@ float metodoChapman(float **P, int g, int i, int j, int n)
 
 }
 
+float probPrimeiraVisita(float **P, int g, int i, int j, int n)
+{
+    float result = 0;
+
+    if (g <= 1)
+    {
+        return P[i][j];
+    }
+    else
+    {
+        for (int k = 0; k < n;  k++)
+        {
+            if (k==j)   continue;
+            result+=P[i][k]*probPrimeiraVisita(P, g-1, k, j, n);
+        }
+        return result;
+    }
+}
