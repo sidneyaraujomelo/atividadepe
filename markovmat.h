@@ -20,4 +20,6 @@ float metodoChapman(float **, int, int, int, int);
 
 float probPrimeiraVisita(float **, int, int, int, int);
 
+void classifyNode (float **, int);
+
 #endif // MARKOVMAT_H_INCLUDED
