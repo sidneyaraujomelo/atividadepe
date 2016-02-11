@@ -75,6 +75,7 @@ int main()
         printf("1. Método da Matriz\n");
         printf("2. Chapman-Kolmogorov\n");
         printf("3. Probabilidade da primeira visita\n");
+        printf("4. Classificacao de estados\n");
         printf("0. Sair\n");
         printf ("Opcao: ");
         scanf("\n%d", &option);
@@ -206,6 +207,12 @@ int main()
 
                 float oij = probPrimeiraVisita(mat, g, i, j, n);
                 printf ("O%d%d - probabilidade de primeira visita: %f \n\n", i,j, oij);
+                break;
+            }
+
+        case 4:
+            {
+                classifyNode(mat, n);
                 break;
             }
         }

@@ -117,3 +117,76 @@ float probPrimeiraVisita(float **P, int g, int i, int j, int n)
         return result;
     }
 }
+
+bool arrayContains(int *v, int i, int n)
+{
+    bool resp = false;
+    for(int j = 0; j < n; j++)
+    {
+        if (v[j] == i)
+        {
+            resp = true;
+            break;
+        }
+    }
+    return resp;
+}
+
+bool containsBFS(float **mat, int i, int j, int n)
+{
+    int v[n];
+    int nv=0;
+    int lnv = 0;
+    v[nv] = i;
+    nv++;
+    bool contains = false;
+
+    while (nv != lnv && !contains )
+    {
+        lnv = nv;
+        for(int k = 0; k < lnv; k++)
+        {
+            for (int l = 0; l < n; l++)
+            {
+                if ((mat[v[k]][l] > 0) && !arrayContains(v, l, nv))
+                {
+                    if (l==j)
+                    {
+                        contains = true;
+                    }
+                    v[nv] = l;
+                    nv++;
+                }
+            }
+        }
+    }
+
+    return contains;
+}
+
+void classifyNode (float **mat, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (mat[i][i] == 1)
+        {
+            printf("Estado %d: Estado Absorvente\n", i);
+        }
+
+        else
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (i==j)   continue;
+                if (mat[i][j] > 0){
+                    if (containsBFS(mat, j, i, n))
+                    {
+                        printf("Estado %d em relacao ao estado %d : Estado Recorrente\n", i, j );
+                    }
+                    else printf("Estado %d em relacao ao estado %d : Estado Transiente\n", i, j );
+                }
+            }
+        }
+    }
+    printf("\n");
+}
