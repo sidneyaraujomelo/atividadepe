@@ -22,4 +22,6 @@ float probPrimeiraVisita(float **, int, int, int, int);
 
 void classifyNode (float **, int);
 
+void classifyPeriodic(float **, int);
+
 #endif // MARKOVMAT_H_INCLUDED

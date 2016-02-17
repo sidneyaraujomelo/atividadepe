@@ -76,6 +76,7 @@ int main()
         printf("2. Chapman-Kolmogorov\n");
         printf("3. Probabilidade da primeira visita\n");
         printf("4. Classificacao de estados\n");
+        printf("5. Periodicidade de estados\n");
         printf("0. Sair\n");
         printf ("Opcao: ");
         scanf("\n%d", &option);
@@ -215,6 +216,13 @@ int main()
                 classifyNode(mat, n);
                 break;
             }
+
+        case 5:
+            {
+                classifyPeriodic(mat, n);
+                break;
+            }
+
         }
 
 

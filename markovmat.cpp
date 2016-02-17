@@ -190,3 +190,79 @@ void classifyNode (float **mat, int n)
     }
     printf("\n");
 }
+
+int countVizinhos(float **mat, int n, int i)
+{
+    int countVizinho = 0;
+    for (int j = 0; j < n; j++)
+    {
+        if (mat[i][j]!=0)   countVizinho++;
+    }
+    return countVizinho;
+}
+
+int classifyPeriodicity(float **mat, int n, int targetNode, int startNode, int l, int visited[], int nvisited)
+{
+    for (int i = 0; i < nvisited; i++)
+    {
+        if (startNode == visited[i])    return l;
+    }
+    visited[nvisited] = startNode;
+    nvisited++;
+    if (targetNode == startNode)    return l+1;
+    for (int i = 0; i < n; i++)
+    {
+        if (mat[startNode][i] != 0)
+        {
+            if (startNode!=i)
+            {
+                l = classifyPeriodicity(mat, n, targetNode, i, l, visited, nvisited);
+                if (l!= 0)  return l+1;
+            }
+        }
+    }
+    return l;
+}
+
+void classifyPeriodic(float **mat, int n)
+{
+    int level;
+    int l;
+    bool periodic;
+    int visited[n];
+    for(int i = 0; i < n; i++)
+    {
+        level = 0;
+        l = 1;
+        periodic = true;
+        for (int j = 0; j < n; j++)
+        {
+            if (mat[i][j] != 0)
+            {
+                level = classifyPeriodicity(mat, n, i, j, 0, visited, 0);
+                if (level == 0)
+                {
+                    periodic=false;
+                }
+                else if (level % l != 0)
+                {
+                    periodic = false;
+                    break;
+                }
+                else
+                {
+                    periodic = true;
+                    if (l==1)   l = level;
+                }
+            }
+        }
+        if (periodic)
+        {
+            printf("Estado %d: Periodico\n", i);
+        }
+        else
+        {
+            printf("Estado %d: Aperiodico\n", i);
+        }
+    }
+}
