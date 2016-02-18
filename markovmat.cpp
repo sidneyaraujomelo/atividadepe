@@ -191,6 +191,120 @@ void classifyNode (float **mat, int n)
     printf("\n");
 }
 
+bool findNodeInClasses(int **classes, int n, int i, int *currentClass)
+{
+    for (int k = 0; k < n; k++)
+    {
+        for (int l = 1; l < classes[k][0]+1; l++)
+        {
+            if (classes[k][l] == i)
+            {
+                if (currentClass!=NULL)
+                {
+                    *currentClass = k;
+                }
+                return true;
+                break;
+            }
+        }
+    }
+    return false;
+}
+
+
+int ** classifyNode2 (float **mat, int n)
+{
+    int **classes;
+
+    classes =(int **) malloc(n*sizeof(int *));
+    for (int i =0; i<n; i++)
+    {
+        classes[i] = (int *)malloc(sizeof(int)*(n+1));
+        for (int j = 0; j < n+1; j++)
+        {
+            classes[i][j]=0;
+        }
+    }
+
+    int currentClass = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (mat[i][i] == 1)
+        {
+            //printf("Estado %d: Estado Absorvente\n", i);
+            classes[currentClass][0]++;
+            classes[currentClass][classes[currentClass][0]] = i;
+            currentClass++;
+        }
+
+        else
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (i==j)
+                {
+                    if (!findNodeInClasses(classes, n, i, &currentClass))
+                    {
+                        while(classes[currentClass][0]!=0)
+                        {
+                            currentClass = (currentClass+1)%n;
+                        }
+                        classes[currentClass][0]++;
+                        classes[currentClass][classes[currentClass][0]] = i;
+                    }
+                }
+                else if (mat[i][j] > 0){
+                    if (containsBFS(mat, j, i, n))
+                    {
+                        //printf("Estado %d em relacao ao estado %d : Estado Recorrente\n", i, j );
+                        bool hasFoundNodeInClasses = false;
+
+                        if (findNodeInClasses(classes, n, i, &currentClass))
+                        {
+                            if (!findNodeInClasses(classes,n,j, NULL))
+                            {
+                                classes[currentClass][0]++;
+                                classes[currentClass][classes[currentClass][0]] = j;
+                            }
+                        }
+                        else
+                        {
+                            while(classes[currentClass][0]!=0)
+                            {
+                                currentClass = (currentClass+1)%n;
+                            }
+                            classes[currentClass][0]++;
+                            classes[currentClass][classes[currentClass][0]] = i;
+                            classes[currentClass][0]++;
+                            classes[currentClass][classes[currentClass][0]] = j;
+                        }
+                    }
+                    else
+                    {
+                        //printf("Estado %d em relacao ao estado %d : Estado Transiente\n", i, j );
+                    }
+                }
+            }
+        }
+    }
+
+    bool hasClasses = false;
+    printf("\n");
+    for (int i = 0; i<n; i++)
+    {
+        if (classes[i][0] == 0) continue;
+        printf("Classe Fechada %d \n", i+1);
+        for (int j = 1; j < classes[i][0]+1; j++)
+        {
+            hasClasses = true;
+            printf("%d ", classes[i][j]);
+        }
+        if (hasClasses) printf("\n");
+    }
+    if (!hasClasses)    printf("Nao ha classes fechadas\n");
+    printf("\n");
+}
+
 int countVizinhos(float **mat, int n, int i)
 {
     int countVizinho = 0;
@@ -224,7 +338,7 @@ int classifyPeriodicity(float **mat, int n, int targetNode, int startNode, int l
     return l;
 }
 
-void classifyPeriodic(float **mat, int n)
+/*void classifyPeriodic(float **mat, int n)
 {
     int level;
     int l;
@@ -265,4 +379,48 @@ void classifyPeriodic(float **mat, int n)
             printf("Estado %d: Aperiodico\n", i);
         }
     }
+}*/
+
+void classifyPeriodic(float **mat, int n)
+{
+    int l;
+    bool periodic;
+    for(int i = 0; i < n; i++)
+    {
+        l = 1;
+        periodic = true;
+        for(int j = 1; j < n*3; j++)
+        {
+            float resp = probPrimeiraVisita(mat, j, i, i, n);
+            if (resp > 0)
+            {
+                if (j==1){
+                    periodic = false;
+                    break;
+                }
+                else
+                {
+                    if (l == 1)
+                    {
+                        l = j;
+                    }
+                    else if (j % l != 0)
+                    {
+                        periodic = false;
+                        break;
+                    }
+                }
+            }
+            //printf("Probabilidade de %d->%d no %d passo: %f\n", i,i,j,resp);
+        }
+        if (periodic)
+        {
+            printf("Estado %d: Periodico\n", i);
+        }
+        else
+        {
+            printf("Estado %d: Aperiodico\n", i);
+        }
+    }
+    printf("\n");
 }

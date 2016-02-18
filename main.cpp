@@ -77,6 +77,7 @@ int main()
         printf("3. Probabilidade da primeira visita\n");
         printf("4. Classificacao de estados\n");
         printf("5. Periodicidade de estados\n");
+        printf("6. Classes Fechadas\n");
         printf("0. Sair\n");
         printf ("Opcao: ");
         scanf("\n%d", &option);
@@ -221,6 +222,11 @@ int main()
             {
                 classifyPeriodic(mat, n);
                 break;
+            }
+
+        case 6:
+            {
+                classifyNode2(mat, n);
             }
 
         }
