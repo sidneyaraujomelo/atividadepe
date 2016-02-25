@@ -72,12 +72,14 @@ int main()
         fromFile = false;
 
         printf("Escolha uma das opcoes abaixo:\n");
-        printf("1. Método da Matriz\n");
+        printf("1. Metodo da Matriz\n");
         printf("2. Chapman-Kolmogorov\n");
         printf("3. Probabilidade da primeira visita\n");
         printf("4. Classificacao de estados\n");
         printf("5. Periodicidade de estados\n");
         printf("6. Classes Fechadas\n");
+        printf("7. Cadeia Irredutivel\n");
+        printf("8. Cadeia Ergodica\n");
         printf("0. Sair\n");
         printf ("Opcao: ");
         scanf("\n%d", &option);
@@ -227,8 +229,64 @@ int main()
         case 6:
             {
                 classifyNode2(mat, n);
+                break;
+            }
+        case 7:
+            {
+                int *a = classifyPeriodic(mat, n);
+                if (a!=NULL)
+                {
+                    bool isIrredutivel = true;
+                    for(int i = 0; i < n && isIrredutivel; i++)
+                    {
+                        if (a[i]==0){
+                            isIrredutivel = false;
+                        }
+                    }
+                    if (isIrredutivel)
+                    {
+                        printf("A cadeia e' irredutivel\n\n");
+                    }
+                    else
+                    {
+                        printf("A cadeia nao e' irredutivel\n\n");
+                    }
+                }
+                break;
             }
 
+        case 8:
+            {
+                int *a = classifyPeriodic(mat, n);
+                int *b = classifyNode(mat, n);
+                printf("\n");
+                if (a!=NULL && b!=NULL)
+                {
+                    bool isErgodic = true;
+                    for(int i = 0; i < n; i++)
+                    {
+                        if (a[i]==1 && b[i]==1)
+                        {
+                            printf("Estado %d: ergodico\n", i);
+                        }
+                        else
+                        {
+                            isErgodic = false;
+                        }
+                    }
+                    printf("\n");
+                    if (isErgodic)
+                    {
+                        printf("A cadeia e' ergodica\n\n");
+                    }
+                    else
+                    {
+                        printf("A cadeia nao e' ergodica\n\n");
+                    }
+                }
+
+                break;
+            }
         }
 
 

@@ -164,13 +164,23 @@ bool containsBFS(float **mat, int i, int j, int n)
     return contains;
 }
 
-void classifyNode (float **mat, int n)
+
+/*
+Função: classifyNode, classifica os estados em absorvente, recorrente e transiente
+Parâmetros: mat - matriz de transição
+            n - numero de estados
+Retorna: Vetor de Inteiros de tamanho n, onde cada estado é classificado como 0 (absorvente) ou 1 (recorrente) ou 2 (transiente);
+*/
+int * classifyNode (float **mat, int n)
 {
+    int* states = (int *)malloc(sizeof(int)*n);
     for (int i = 0; i < n; i++)
     {
+        states[i]=9;
         if (mat[i][i] == 1)
         {
             printf("Estado %d: Estado Absorvente\n", i);
+            states[i] = 0;
         }
 
         else
@@ -182,12 +192,18 @@ void classifyNode (float **mat, int n)
                     if (containsBFS(mat, j, i, n))
                     {
                         printf("Estado %d em relacao ao estado %d : Estado Recorrente\n", i, j );
+                        states[i]=1;
                     }
-                    else printf("Estado %d em relacao ao estado %d : Estado Transiente\n", i, j );
+                    else
+                    {
+                        printf("Estado %d em relacao ao estado %d : Estado Transiente\n", i, j );
+                        if (states[i]!=1)   states[i]=2;
+                    }
                 }
             }
         }
     }
+    return states;
     printf("\n");
 }
 
@@ -381,10 +397,17 @@ int classifyPeriodicity(float **mat, int n, int targetNode, int startNode, int l
     }
 }*/
 
-void classifyPeriodic(float **mat, int n)
+/*
+Função: classifyPeriodic, classifica os estados em periódicos ou aperiódicos
+Parâmetros: mat - matriz de transição
+            n - numero de estados
+Retorna: Vetor de Inteiros de tamanho n, onde cada estado é classificado como 0 (periódico) ou 1 (aperiodico);
+*/
+int* classifyPeriodic(float **mat, int n)
 {
     int l;
     bool periodic;
+    int* states = (int *)malloc(sizeof(int)*n);
     for(int i = 0; i < n; i++)
     {
         l = 1;
@@ -416,11 +439,14 @@ void classifyPeriodic(float **mat, int n)
         if (periodic)
         {
             printf("Estado %d: Periodico\n", i);
+            states[i]=0;
         }
         else
         {
             printf("Estado %d: Aperiodico\n", i);
+            states[i]=1;
         }
     }
     printf("\n");
+    return states;
 }
